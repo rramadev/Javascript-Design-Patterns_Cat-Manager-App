@@ -1,0 +1,18 @@
+{
+  "name": "udemy-javascript-design-patterns",
+  "version": "1.0.0",
+  "description": "Javascript Design Patterns - Demo App",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build && npm run serve",
+    "build": "babel src -d dist",
+    "serve": "nodemon server.js"
+  },
+  "author": "Raúl Rama",
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "6.23.0",
+    "babel-preset-env": "1.6.1",
+    "express": "4.16.2"
+  }
+}
