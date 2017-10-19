@@ -4,9 +4,12 @@ const path = require('path');
 
 const port = '8080';
 
-app.use('/', (req, res) => {
-  res.sendFile(path.join(__dirname + 'src/index.html'));
-})
+app.use(express.static(__dirname + '/src'));
+// app.use('/assets',  express.static(__dirname + '/bower_components'));
+
+// app.use('/', (req, res) => {
+//   res.sendFile(path.join(__dirname + './src/index.html'));
+// });
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}...`);  
