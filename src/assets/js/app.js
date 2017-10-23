@@ -1,35 +1,7 @@
 // let data = require ('../../data/cats').catList;
 
-/**
- * Shows the selected cat´s data
- * 
- * @param {Object} cat 
- * @param {HTMLElement} elName 
- * @param {HTMLElement} elCounter 
- * @param {HTMLElement} elCatImg 
- */
-function showCat(cat, elName, elCounter, elCatImg) {
-  elName.innerHTML = cat.name;
-  elCounter.innerHTML = cat.clicks;
-  elCatImg.src = cat.imgSrc;  
-}
-
-/**
- * Add one click to the selected cat
- * 
- * @param {Object} cat 
- */
-function addClick(cat) {
-  cat.clicks += 1;
-}
-
-/**
- * Initialize data and DOM elements
- * 
- */
-function init() {  
-  // let catList = data;
-  let catList = [
+const data = {
+  catList: [
     {
       id: 0,
       name: 'Cat1',
@@ -48,45 +20,77 @@ function init() {
       clicks: 0,
       imgSrc: 'assets/img/cat3.jpg'
     }
-  ];
+  ]
+};
 
-  let selected = 0;
-  
-  let elList = document.getElementById('list');  
-  let elName = document.getElementById('name');
-  let elCounter = document.getElementById('counter');
-  let elCatImg = document.getElementById('catImg');
-  
-  catList.forEach((cat) => {
-    let li = document.createElement('li');
-    li.setAttribute('class','list-group-item');    
-    let textNode = document.createTextNode(cat.name + ' - ' + cat.clicks);
-    li.appendChild(textNode);
+const catManager = {
+  selected: 0,
 
-    li.addEventListener('click', 
-      (function(catty) {
-        return function() {
-          showCat(catty, elName, elCounter, elCatImg);
-          selected = cat.id;
-        };
-      })(cat)
+  getList: function() {
+    return data.catList;
+  },
+
+  showCat: function(cat) {
+    this.selected = cat.id;
+    viewManager.render(cat);
+  },
+
+  addClick: function() {
+    data.catList[this.selected].clicks += 1;
+    viewManager.render(data.catList[this.selected]);
+  },
+
+  init: function() { 
+    viewManager.init();
+  }
+};
+
+const viewManager = {
+  init: function() {
+    this.elList = document.getElementById('list');  
+    this.elName = document.getElementById('name');
+    this.elCounter = document.getElementById('counter');
+    this.elCatImg = document.getElementById('catImg');
+
+    let catList = catManager.getList();
+
+    console.log(catList);
+
+    catList.forEach((cat) => {
+      let li = document.createElement('li');
+      li.setAttribute('class','list-group-item');    
+      let textNode = document.createTextNode(cat.name + ' - ' + cat.clicks);
+      li.appendChild(textNode);
+  
+      li.addEventListener('click', 
+        (function(catty) {
+          return function() {
+            catManager.showCat(catty);           
+          };
+        })(cat)
+      );
+  
+      this.elList.appendChild(li);
+    }); 
+    
+    this.elCatImg.addEventListener('click', function() {
+        catManager.addClick();        
+      }  
     );
-
-    elList.appendChild(li);
-  }); 
   
-  elCatImg.addEventListener('click', function() {
-      addClick(catList[selected]);
-      showCat(catList[selected], elName, elCounter, elCatImg);
-    }  
-  );
-
-  // Show Cat1 from start
-  showCat(catList[0], elName, elCounter, elCatImg);
-}
+    // Show Cat1 from start
+    catManager.showCat(catList[0]);
+  },
+  render: function(cat) {
+    this.elName.innerHTML = cat.name;
+    this.elCounter.innerHTML = cat.clicks;
+    this.elCatImg.src = cat.imgSrc;  
+  }
+}; 
+  
 
 window.onload = function () {
   console.log('Document loaded...');
   // Run App on window´s load
-  init();
+  catManager.init();
 }
