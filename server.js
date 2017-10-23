@@ -5,7 +5,7 @@ const path = require('path');
 const port = '8080';
 
 app.use(express.static(__dirname + '/src'));
-// app.use('/assets',  express.static(__dirname + '/bower_components'));
+// app.use('/assets',  express.static(__dirname + '/assets'));
 
 // app.use('/', (req, res) => {
 //   res.sendFile(path.join(__dirname + './src/index.html'));
