@@ -1,3 +1,21 @@
-ul li, img {
+.list-group {
+  margin-top: 1.2em;
+}
+
+li {
+  cursor: pointer;
+  width: 300px;
+  margin: 0 1em;
+}
+
+.badge {
+  font-size: 1em;
+}
+
+.image {
+  margin-top: 2.5em;
+}
+
+#catImg{
   cursor: pointer;
 }

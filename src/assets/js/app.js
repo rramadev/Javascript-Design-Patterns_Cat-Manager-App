@@ -32,29 +32,27 @@ const catManager = {
 
   showCat: function(cat) {
     this.selected = cat.id;
-    viewManager.render(cat);
+    viewImg.render(cat);
   },
 
   addClick: function() {
     data.catList[this.selected].clicks += 1;
-    viewManager.render(data.catList[this.selected]);
+    viewImg.render(data.catList[this.selected]);
   },
 
   init: function() { 
-    viewManager.init();
+    viewImg.init();
+    viewList.init();  
+            
+    // Show Cat1 from start
+    this.showCat(this.getList()[0]);  
   }
 };
 
-const viewManager = {
+const viewList = {
   init: function() {
-    this.elList = document.getElementById('list');  
-    this.elName = document.getElementById('name');
-    this.elCounter = document.getElementById('counter');
-    this.elCatImg = document.getElementById('catImg');
-
+    this.elList = document.getElementById('list'); 
     let catList = catManager.getList();
-
-    console.log(catList);
 
     catList.forEach((cat) => {
       let li = document.createElement('li');
@@ -72,21 +70,25 @@ const viewManager = {
   
       this.elList.appendChild(li);
     }); 
-    
+  }
+}; 
+
+const viewImg = {
+  init: function() {
+    this.elName = document.getElementById('name');
+    this.elCounter = document.getElementById('counter');
+    this.elCatImg = document.getElementById('catImg');
+
     this.elCatImg.addEventListener('click', function() {
-        catManager.addClick();        
-      }  
-    );
-  
-    // Show Cat1 from start
-    catManager.showCat(catList[0]);
+      catManager.addClick();        
+    }); 
   },
   render: function(cat) {
     this.elName.innerHTML = cat.name;
     this.elCounter.innerHTML = cat.clicks;
-    this.elCatImg.src = cat.imgSrc;  
+    this.elCatImg.src = cat.imgSrc;   
   }
-}; 
+}
   
 
 window.onload = function () {
