@@ -16,6 +16,22 @@ li {
   margin-top: 2.5em;
 }
 
-#catImg{
+#catImg {
   cursor: pointer;
+}
+
+form {
+  margin: 1em;
+}
+
+.form-control {
+  width: 300px;
+}
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: block;
 }

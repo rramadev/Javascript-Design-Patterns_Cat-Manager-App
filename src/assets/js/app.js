@@ -1,6 +1,8 @@
 // let data = require ('../../data/cats').catList;
 
-const data = {
+const data = {  
+  showAdmin: false,
+  selectedCat: {},
   catList: [
     {
       id: 0,
@@ -24,36 +26,64 @@ const data = {
 };
 
 const catManager = {
-  selected: 0,
+  getSelectedCat: function() {
+    return data.selectedCat;
+  },
 
   getList: function() {
     return data.catList;
   },
 
+  getShowAdmin: function() {
+    return data.showAdmin;
+  },
+
   showCat: function(cat) {
-    this.selected = cat.id;
+    data.selectedCat = cat;
     viewImg.render(cat);
   },
 
   addClick: function() {
-    data.catList[this.selected].clicks += 1;
-    viewImg.render(data.catList[this.selected]);
+    data.selectedCat.clicks += 1;
+    viewImg.render(data.selectedCat);
+  },  
+
+  showAdmin: function() { 
+    data.showAdmin = !data.showAdmin;
+    viewAdmin.render();   
+  },
+
+  saveAdmin: function(cat) {
+    data.selectedCat = {...cat};
+    this.showAdmin();
+    viewList.render();
+    viewImg.render(data.selectedCat);
   },
 
   init: function() { 
+    // Set current selectedCat cat index to 0 by default
+    data.selectedCat = data.catList[0];
+
+    // Initialize views
     viewImg.init();
-    viewList.init();  
+    viewList.init();   
+    viewList.render();
+    viewAdmin.init();
+    viewAdmin.render(data.selectedCat);
             
-    // Show Cat1 from start
-    this.showCat(this.getList()[0]);  
+    // Show the actual selectedCat cat (first by default)
+    this.showCat(data.selectedCat);  
   }
 };
 
 const viewList = {
   init: function() {
     this.elList = document.getElementById('list'); 
+  },
+  render: function() {
+    this.elList.innerHTML = '';
     let catList = catManager.getList();
-
+    
     catList.forEach((cat) => {
       let li = document.createElement('li');
       li.setAttribute('class','list-group-item');    
@@ -88,8 +118,49 @@ const viewImg = {
     this.elCounter.innerHTML = cat.clicks;
     this.elCatImg.src = cat.imgSrc;   
   }
-}
-  
+}  
+
+const viewAdmin = {
+  init: function() {
+    this.elAdminForm = document.getElementById('adminForm');
+    this.elAdminBtn = document.getElementById('adminBtn');
+    this.elNameInput = document.getElementById('nameInput');
+    this.elUrlInput = document.getElementById('urlInput');
+    this.elClickInput = document.getElementById('clickInput');
+    this.elCancelBtn = document.getElementById('cancelBtn');
+    this.elSaveBtn = document.getElementById('saveBtn');
+    
+    this.elAdminBtn.addEventListener('click', function() {
+      catManager.showAdmin();        
+    }); 
+
+    this.elCancelBtn.addEventListener('click', function() {
+      catManager.showAdmin();         
+    });
+    
+    this.saveCat = function() {
+      let saveCat = {
+        name: this.elNameInput.value,
+        clicks: this.elClickInput.value,
+        imgSrc: this.elUrlInput.value
+      };      
+      catManager.saveAdmin(saveCat); 
+    };
+
+    this.elSaveBtn.addEventListener('click', 
+      this.saveCat.bind(this));
+  },
+  render: function() {
+    let cat = catManager.getSelectedCat();
+    this.elNameInput.value = cat.name;
+    this.elClickInput.value = cat.clicks; 
+    this.elUrlInput.value = cat.imgSrc;
+
+    let showForm = catManager.getShowAdmin() ?
+      this.elAdminForm.setAttribute('class','show') :
+      this.elAdminForm.setAttribute('class','hidden');   
+  }
+}  
 
 window.onload = function () {
   console.log('Document loaded...');
