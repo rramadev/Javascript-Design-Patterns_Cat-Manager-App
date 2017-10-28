@@ -45,6 +45,7 @@ const catManager = {
 
   addClick: function() {
     data.selectedCat.clicks += 1;
+    viewList.render();
     viewImg.render(data.selectedCat);
   },  
 
@@ -53,8 +54,14 @@ const catManager = {
     viewAdmin.render();   
   },
 
-  saveAdmin: function(cat) {
-    data.selectedCat = {...cat};
+  saveAdmin: function(name, clicks, imgSrc) {
+    // data.selectedCat = {...cat};
+    // let idx = data.catList.findIndex((obj) => obj.id == cat.id);
+    // data.catList[idx] = {...cat} ;
+    data.selectedCat.name = name;
+    data.selectedCat.clicks = clicks;
+    data.selectedCat.imgSrc = imgSrc;
+    
     this.showAdmin();
     viewList.render();
     viewImg.render(data.selectedCat);
@@ -138,13 +145,12 @@ const viewAdmin = {
       catManager.showAdmin();         
     });
     
-    this.saveCat = function() {
-      let saveCat = {
-        name: this.elNameInput.value,
-        clicks: this.elClickInput.value,
-        imgSrc: this.elUrlInput.value
-      };      
-      catManager.saveAdmin(saveCat); 
+    this.saveCat = function() {      
+      let name = this.elNameInput.value;
+      let clicks = parseInt(this.elClickInput.value);
+      let imgSrc = this.elUrlInput.value;
+            
+      catManager.saveAdmin(name, clicks, imgSrc); 
     };
 
     this.elSaveBtn.addEventListener('click', 
