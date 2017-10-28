@@ -1,7 +1,7 @@
 {
   "name": "udemy-javascript-design-patterns",
   "version": "1.0.0",
-  "description": "Javascript Design Patterns - Demo App",
+  "description": "Javascript Design Patterns - Cat Manager Demo App",
   "main": "index.js",
   "scripts": {
     "start": "npm run build && npm run serve",
